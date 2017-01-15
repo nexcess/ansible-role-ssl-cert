@@ -1,0 +1,11 @@
+---
+
+ssl_unix_user: "root"
+ssl_unix_group: "root"
+
+ssl_crt: ""
+ssl_key: ""
+
+ssl_crt_filename: "ssl.crt"
+ssl_key_filename: "ssl.key"
+ssl_pem_filename: "ssl.pem"
