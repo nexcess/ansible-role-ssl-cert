@@ -1,0 +1,33 @@
+---
+
+- name: Make Sure SSL Dir Exists ({{ ssl_dir }})
+  file:
+    path="{{ ssl_dir }}"
+    owner="{{ ssl_unix_user }}"
+    group="{{ ssl_unix_group }}"
+    mode="0700"
+    state="directory"
+
+- name: Dump SSL Certificate
+  copy:
+    content="{{ ssl_crt }}"
+    dest="{{ ssl_dir }}/{{ ssl_crt_filename }}"
+    owner="{{ ssl_unix_user }}"
+    group="{{ ssl_unix_group }}"
+    mode="0600"
+
+- name: Dump SSL Private Key
+  copy:
+    content="{{ ssl_key }}"
+    dest="{{ ssl_dir }}/{{ ssl_key_filename }}"
+    owner="{{ ssl_unix_user }}"
+    group="{{ ssl_unix_group }}"
+    mode="0600"
+
+- name: Dump SSL PEM
+  template:
+    src="ssl.pem.j2"
+    dest="{{ ssl_dir }}/{{ ssl_pem_filename }}"
+    owner="{{ ssl_unix_user }}"
+    group="{{ ssl_unix_group }}"
+    mode="0600"
