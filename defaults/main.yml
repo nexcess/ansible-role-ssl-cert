@@ -3,6 +3,8 @@
 ssl_unix_user: "root"
 ssl_unix_group: "root"
 
+ssl_dir: "/etc/ssl"
+
 ssl_crt: ""
 ssl_key: ""
 
