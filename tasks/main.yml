@@ -11,7 +11,7 @@
 - name: Dump SSL Certificate
   copy:
     content="{{ ssl_crt }}"
-    dest="{{ ssl_dir }}/{{ ssl_crt_file }}"
+    dest="{{ ssl_crt_file }}"
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     mode="0600"
@@ -19,15 +19,17 @@
 - name: Dump SSL Private Key
   copy:
     content="{{ ssl_key }}"
-    dest="{{ ssl_dir }}/{{ ssl_key_file }}"
+    dest="{{ ssl_key_file }}"
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     mode="0600"
+  no_log: true
 
 - name: Dump SSL PEM
   template:
     src="ssl.pem.j2"
-    dest="{{ ssl_dir }}/{{ ssl_pem_file }}"
+    dest="{{ ssl_pem_file }}"
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     mode="0600"
+  no_log: true
