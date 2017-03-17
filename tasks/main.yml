@@ -6,30 +6,37 @@
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     mode="0700"
+    recurse="yes"
     state="directory"
 
-- name: Dump SSL Certificate
+- name: Dump SSL Certificates
   copy:
-    content="{{ ssl_crt }}"
-    dest="{{ ssl_crt_file }}"
+    content="{{ item.crt }}"
+    dest="{{ ssl_dir }}/{{ item.endpoint }}.crt"
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     mode="0600"
+    backup="yes"
+  with_items: "{{ ssl_bundles }}"
 
-- name: Dump SSL Private Key
+- name: Dump SSL Private Keys
   copy:
-    content="{{ ssl_key }}"
-    dest="{{ ssl_key_file }}"
+    content="{{ item.key }}"
+    dest="{{ ssl_dir }}/{{ item.endpoint }}.key"
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     mode="0600"
+    backup="yes"
+  with_items: "{{ ssl_bundles }}"
   no_log: true
 
-- name: Dump SSL PEM
+- name: Dump SSL PEMs
   template:
     src="ssl.pem.j2"
-    dest="{{ ssl_pem_file }}"
+    dest="{{ ssl_dir }}/{{ item.endpoint }}.pem"
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     mode="0600"
+    backup="yes"
+  with_items: "{{ ssl_bundles }}"
   no_log: true
