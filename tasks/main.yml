@@ -36,3 +36,4 @@
     backup="yes"
     mode="0600"
   no_log: true
+  register: ssl_pem
