@@ -5,7 +5,7 @@
     path="{{ ssl_dir }}"
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
-    mode="0700"
+    mode=0700
     state="directory"
 
 - name: Dump SSL Certificate
@@ -15,7 +15,7 @@
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     backup="yes"
-    mode="0600"
+    mode=0600
 
 - name: Dump SSL Private Key
   copy:
@@ -24,7 +24,7 @@
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     backup="yes"
-    mode="0600"
+    mode=0600
   no_log: true
 
 - name: Dump SSL PEM
@@ -34,6 +34,30 @@
     owner="{{ ssl_unix_user }}"
     group="{{ ssl_unix_group }}"
     backup="yes"
-    mode="0600"
+    mode=0600
   no_log: true
   register: ssl_pem
+
+- stat:
+    path="{{ ssl_chain_file }}"
+  register: chain
+
+- name: Dump SSL Chain For SSL Stapling
+  copy:
+    content="{{ ssl_chain_crt }}"
+    dest="{{ ssl_chain_file }}"
+    owner="{{ ssl_unix_user }}"
+    group="{{ ssl_unix_group }}"
+    backup="yes"
+    mode=0600
+  when:
+    - not chain.stat.exists
+    - ssl_chain_crt != ""
+
+- stat:
+    path="{{ ssl_dhparam_file }}"
+  register: dhparam
+
+- name: Create dhparam
+  command: openssl dhparam 4096 -out "{{ ssl_dhparam_file }}"
+  when: not dhparam.stat.exists
